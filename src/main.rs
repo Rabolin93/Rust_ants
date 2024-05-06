@@ -1,6 +1,10 @@
 use std::io;
 use std::process::exit;
+use crate::board::Board;
+use crate::board::Entity;
+use rand::Rng;
 
+pub mod board;
 
 fn main() {
 
@@ -15,6 +19,7 @@ fn main() {
         match choice{
             1=>{println!("Start the simulation");
                 print_menu();
+                simulation(&mut config);
                 choice=0;
                 },
             2=>{
@@ -164,6 +169,47 @@ fn options(config: &mut Cfg){
     }
 }
 
+fn simulation(config: &mut Cfg){
+    let mut rng=rand::thread_rng();
+    let mut sim_board=Board::new(config.board_height,config.board_width);
+    let mut number_of_ants:i32=0;
+    let mut turn=0;
+    let mut dud=String::new();
+
+    while number_of_ants!=config.number_of_ants{
+        let hpos=rng.gen_range(0..config.board_height);
+        let wpos=rng.gen_range(0..config.board_width);
+        if *sim_board.get(hpos as usize,wpos as usize)==Entity::Empty{
+            sim_board.set(hpos as usize,wpos as usize,Entity::Ant);
+            number_of_ants+=1;
+        }
+
+    }
+    // for _i in 0..config.number_of_ants{
+    //     let hpos=rng.gen_range(0..config.board_height);
+    //     let wpos=rng.gen_range(0..config.board_width);
+    //     sim_board.set(hpos as usize,wpos as usize,Entity::Ant)
+    // }
+    
+    while turn!=config.number_of_turns+1{
+        if config.automatic_turns==true{
+            println!("Turn {}", turn);
+            sim_board.draw();
+            turn+=1;
+            continue
+        }
+        else{
+            println!("Press enter to continue");
+            let _=io::stdin().read_line(&mut dud);
+        }
+        println!("Turn {}", turn);
+        sim_board.draw();
+        
+
+        turn+=1;
+    }
+}
+
 
 
 //Structs
@@ -179,8 +225,8 @@ struct Cfg{
 impl Default for Cfg{
     fn default() -> Self {
         Cfg{
-        board_height:50,
-        board_width:50,
+        board_height:10,
+        board_width:10,
         number_of_ants:5,
         number_of_turns:50,
         automatic_turns:false,
@@ -192,3 +238,5 @@ impl std::fmt::Display for Cfg{
         write!(f,"Configuration: height {}, width {}, ants {}, turns {}, automatic {}",self.board_height, self.board_width, self.number_of_ants, self.number_of_turns, self.automatic_turns)
     }
 }
+
+
