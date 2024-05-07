@@ -164,7 +164,6 @@ fn options(config: &mut Cfg){
 
             _=>{
                     println!("Choose from possible options");
-                    //choice=choose_a_number().unwrap_or_default();
 
 
             }
@@ -180,7 +179,8 @@ fn simulation(config: &mut Cfg){
     let mut turn=0;
     let mut dud=String::new();
     let mut vector_of_ants:Vec<SAnt>=Vec::new();
-    let mut number_of_leaves=0;
+    let mut number_of_leaves=((sim_board.height as f32*sim_board.width as f32)*0.15) as i32;
+    
 
     while number_of_ants!=config.number_of_ants{
         let hpos=rng.gen_range(0..config.board_height);
@@ -194,13 +194,13 @@ fn simulation(config: &mut Cfg){
 
     }
 
-    while number_of_leaves!=200{
+    while number_of_leaves!=0{
         let hpos=rng.gen_range(0..config.board_height);
         let wpos=rng.gen_range(0..config.board_width);
         if *sim_board.get(hpos as usize,wpos as usize)==Entity::Empty{
             sim_board.set(hpos as usize,wpos as usize,Entity::Leaf);
         }
-        number_of_leaves+=1;
+        number_of_leaves-=1;
 
     }
     println!("Inital board:");
@@ -213,8 +213,9 @@ fn simulation(config: &mut Cfg){
 
     while turn!=config.number_of_turns+1{
         if config.automatic_turns==true{
-            println!("Turn {}", turn);
-            sim_board.draw();
+            //println!("Turn {}", turn);
+            //Rysowanie w kazdej turze- wydluza dzialanie programu
+            //sim_board.draw(); 
             for ant in &mut vector_of_ants{
                 ant.ant_move(&mut sim_board);
             
@@ -236,6 +237,10 @@ fn simulation(config: &mut Cfg){
 
         turn+=1;
     }
+    if config.automatic_turns==true{
+        sim_board.draw();
+    }
+    
 }
 
 
@@ -255,8 +260,8 @@ impl Default for Cfg{
         Cfg{
         board_height:50,
         board_width:50,
-        number_of_ants:5,
-        number_of_turns:10000,
+        number_of_ants:10,
+        number_of_turns:100000,
         automatic_turns:true,
         }
     }

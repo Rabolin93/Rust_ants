@@ -232,7 +232,7 @@ impl SAnt{
         if *board.get(self.ant_pos_h,self.ant_pos_w)==Leaf && self.is_carrying==false && self.carry_block==0{
             board.set(self.ant_pos_h,self.ant_pos_w,Ant);
             self.is_carrying=true;
-            println!("picked up a leaf");
+            //println!("picked up a leaf");
         }
 
     }
@@ -242,7 +242,7 @@ impl SAnt{
             self.is_carrying=false;
             self.carry_block=5;
             board.set(self.ant_pos_h,self.ant_pos_w,Leaf);
-            println!("dropped a leaf")
+            //println!("dropped a leaf")
         }
         
     }

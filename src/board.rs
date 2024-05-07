@@ -3,7 +3,6 @@
 #[derive(Clone,Copy,Debug,PartialEq)]
 pub enum Entity{
     Ant,
-    CAnt,
     Leaf,
     Empty
 }
@@ -37,7 +36,6 @@ impl Board {
                 let icon= &self.board[i][j];
                 match icon{
                     Entity::Ant=>print!("A"),
-                    Entity::CAnt=>print!("C"),
                     Entity::Leaf=>print!("L"),
                     Entity::Empty=>print!("*"),
                 }     
