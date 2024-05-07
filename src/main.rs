@@ -3,6 +3,8 @@ use std::process::exit;
 use crate::board::Board;
 use crate::board::Entity;
 use rand::Rng;
+use crate::ant::SAnt;
+
 
 pub mod board;
 pub mod ant;
@@ -177,26 +179,46 @@ fn simulation(config: &mut Cfg){
     let mut number_of_ants:i32=0;
     let mut turn=0;
     let mut dud=String::new();
+    let mut vector_of_ants:Vec<SAnt>=Vec::new();
+    let mut number_of_leaves=0;
 
     while number_of_ants!=config.number_of_ants{
         let hpos=rng.gen_range(0..config.board_height);
         let wpos=rng.gen_range(0..config.board_width);
         if *sim_board.get(hpos as usize,wpos as usize)==Entity::Empty{
             sim_board.set(hpos as usize,wpos as usize,Entity::Ant);
+            let new_ant:SAnt=SAnt::new(wpos as usize, hpos as usize);
+            vector_of_ants.push(new_ant);
             number_of_ants+=1;
         }
 
     }
-    // for _i in 0..config.number_of_ants{
-    //     let hpos=rng.gen_range(0..config.board_height);
-    //     let wpos=rng.gen_range(0..config.board_width);
-    //     sim_board.set(hpos as usize,wpos as usize,Entity::Ant)
-    // }
+
+    while number_of_leaves!=200{
+        let hpos=rng.gen_range(0..config.board_height);
+        let wpos=rng.gen_range(0..config.board_width);
+        if *sim_board.get(hpos as usize,wpos as usize)==Entity::Empty{
+            sim_board.set(hpos as usize,wpos as usize,Entity::Leaf);
+        }
+        number_of_leaves+=1;
+
+    }
+    println!("Inital board:");
+    sim_board.draw();
+    println!("Press enter to continue");
+    let _=io::stdin().read_line(&mut dud);
     
+   
+
+
     while turn!=config.number_of_turns+1{
         if config.automatic_turns==true{
             println!("Turn {}", turn);
             sim_board.draw();
+            for ant in &mut vector_of_ants{
+                ant.ant_move(&mut sim_board);
+            
+            }
             turn+=1;
             continue
         }
@@ -206,6 +228,10 @@ fn simulation(config: &mut Cfg){
         }
         println!("Turn {}", turn);
         sim_board.draw();
+        for ant in &mut vector_of_ants{
+            ant.ant_move(&mut sim_board);
+            
+        }
         
 
         turn+=1;
@@ -227,11 +253,11 @@ struct Cfg{
 impl Default for Cfg{
     fn default() -> Self {
         Cfg{
-        board_height:10,
-        board_width:10,
+        board_height:50,
+        board_width:50,
         number_of_ants:5,
-        number_of_turns:50,
-        automatic_turns:false,
+        number_of_turns:10000,
+        automatic_turns:true,
         }
     }
 }
