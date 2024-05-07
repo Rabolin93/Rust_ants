@@ -5,6 +5,7 @@ use crate::board::Entity;
 use rand::Rng;
 
 pub mod board;
+pub mod ant;
 
 fn main() {
 
@@ -161,7 +162,7 @@ fn options(config: &mut Cfg){
 
             _=>{
                     println!("Choose from possible options");
-                    choice=choose_a_number().unwrap_or_default();
+                    //choice=choose_a_number().unwrap_or_default();
 
 
             }
@@ -170,6 +171,7 @@ fn options(config: &mut Cfg){
 }
 
 fn simulation(config: &mut Cfg){
+
     let mut rng=rand::thread_rng();
     let mut sim_board=Board::new(config.board_height,config.board_width);
     let mut number_of_ants:i32=0;

@@ -1,3 +1,5 @@
+//use crate::ant::SAnt;
+
 #[derive(Clone,Copy,Debug,PartialEq)]
 pub enum Entity{
     Ant,
@@ -10,8 +12,8 @@ pub enum Entity{
 
 #[derive(Clone)]
 pub struct Board{
-    height:usize,
-    width:usize,
+    pub height:usize,
+    pub width:usize,
     board:Vec<Vec<Entity>>
 }
 
